@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм»
 
 * Студент: [Юрий](https://up.htmlacademy.ru/javascript-individual/2/user/2482805).
-* Наставник: `Неизвестно`.
+* Наставник: [Евгения](https://htmlacademy.ru/profile/id2387199).
 
 ---
 
