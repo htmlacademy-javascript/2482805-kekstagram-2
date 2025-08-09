@@ -1,4 +1,4 @@
-const BASE_URL = '/api/kekstagram';
+const BASE_URL = 'https://31.javascript.htmlacademy.pro/kekstagram';
 
 const getData = async () => {
   try {
