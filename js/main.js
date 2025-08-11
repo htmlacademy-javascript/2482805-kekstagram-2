@@ -3,6 +3,7 @@ import './form.js';
 import { getData } from './api.js';
 import { setOnFilterClick } from './filter.js';
 
+const DATA_ERROR_TIMEOUT = 5000;
 const photosContainer = document.querySelector('.pictures');
 
 const getPhotos = async () => {
@@ -18,7 +19,7 @@ const getPhotos = async () => {
 
     setTimeout(() => {
       dataErrorMessage.remove();
-    }, 5000);
+    }, DATA_ERROR_TIMEOUT);
   }
 };
 
