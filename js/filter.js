@@ -1,11 +1,12 @@
 import { renderPictures } from './gallery.js';
 
+const DEBOUNCE_DELAY = 500;
 const filterForm = document.querySelector('.img-filters__form');
 const filterDefaultButton = document.querySelector('#filter-default');
 const filterRandomButton = document.querySelector('#filter-random');
 const filterDiscussedButton = document.querySelector('#filter-discussed');
 
-const debounce = (callback, timeoutDelay = 500) => {
+const debounce = (callback, timeoutDelay = DEBOUNCE_DELAY) => {
   let timeoutId;
   return (...rest) => {
     clearTimeout(timeoutId);
