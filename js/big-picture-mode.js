@@ -64,7 +64,8 @@ const initBigPictureModal = (photo) => {
   currentPhotoComments = photo.comments;
   commentsShown = 0;
 
-  socialComments.innerHTML = '';
+  socialComments.textContent = '';
+
   bigPictureModal.querySelector('.big-picture__img img').src = photo.url;
   bigPictureModal.querySelector('.likes-count').textContent = photo.likes;
   bigPictureModal.querySelector('.social__caption').textContent = photo.description;
@@ -73,6 +74,7 @@ const initBigPictureModal = (photo) => {
   renderComments();
 
   commentsLoader.addEventListener('click', onCommentsLoaderClick);
+
   openBigPictureModal();
 };
 

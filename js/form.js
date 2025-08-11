@@ -3,13 +3,17 @@ import { validatePristine, resetPristine } from './pristine.js';
 import { initSlider, resetSlider } from './slider.js';
 import { sendData } from './api.js';
 
+const body = document.body;
 const uploadForm = document.querySelector('.img-upload__form');
-uploadForm.action = 'https://28.javascript.pages.academy/kekstagram';
-uploadForm.method = 'post';
-uploadForm.enctype = 'multipart/form-data';
 const uploadFileInput = uploadForm.querySelector('.img-upload__input');
 const uploadOverlay = uploadForm.querySelector('.img-upload__overlay');
 const uploadCancel = uploadForm.querySelector('.img-upload__cancel');
+const imagePreview = uploadOverlay.querySelector('.img-upload__preview img');
+const effectsPreviews = uploadOverlay.querySelectorAll('.effects__preview');
+const successTemplate = document.querySelector('#success').content.querySelector('.success');
+const errorTemplate = document.querySelector('#error').content.querySelector('.error');
+const hashtagsInput = uploadForm.querySelector('.text__hashtags');
+const descriptionInput = uploadForm.querySelector('.text__description');
 
 initSlider();
 
@@ -23,42 +27,62 @@ const { openModal: openUploadForm, closeModal: closeUploadForm } = createModalHa
   uploadOverlay,
   uploadCancel,
   resetAll,
-  uploadOverlay
+  uploadOverlay,
+  hashtagsInput,
+  descriptionInput
 );
 
 uploadFileInput.addEventListener('change', () => {
-  openUploadForm();
+  const file = uploadFileInput.files[0];
+  if (file) {
+    const objectURL = URL.createObjectURL(file);
+    imagePreview.src = objectURL;
+    effectsPreviews.forEach((preview) => {
+      preview.style.backgroundImage = `url(${objectURL})`;
+    });
+    openUploadForm();
+  }
 });
 
-const showErrorMessage = (message) => {
-  const errorMessageContainer = document.createElement('div');
-  errorMessageContainer.style.zIndex = '1000';
-  errorMessageContainer.style.position = 'absolute';
-  errorMessageContainer.style.left = '0';
-  errorMessageContainer.style.top = '0';
-  errorMessageContainer.style.right = '0';
-  errorMessageContainer.style.padding = '10px 3px';
-  errorMessageContainer.style.fontSize = '30px';
-  errorMessageContainer.style.textAlign = 'center';
-  errorMessageContainer.style.backgroundColor = 'red';
-  errorMessageContainer.textContent = message;
-  document.body.append(errorMessageContainer);
+const showMessage = (template) => {
+  const messageElement = template.cloneNode(true);
+  body.append(messageElement);
 
-  setTimeout(() => {
-    errorMessageContainer.remove();
-  }, 5000);
+  const closeMessage = () => {
+    messageElement.remove();
+  };
+
+  const closeButton = messageElement.querySelector('button');
+  const outsideClickArea = messageElement;
+
+  const { openModal, closeModal } = createModalHandler(
+    messageElement,
+    closeButton,
+    closeMessage,
+    outsideClickArea
+  );
+
+  closeButton.addEventListener('click', closeModal);
+
+  openModal();
 };
 
 const onFormSubmit = async (evt) => {
   evt.preventDefault();
   const isValid = validatePristine();
   if (isValid) {
+    const submitButton = uploadForm.querySelector('.img-upload__submit');
     const formData = new FormData(uploadForm);
+    submitButton.setAttribute('disabled', 'true');
     try {
       await sendData(formData);
       closeUploadForm();
+      showMessage(successTemplate);
+      submitButton.removeAttribute('disabled');
+      body.classList.remove('modal-open');
     } catch (err) {
-      showErrorMessage(err.message);
+      showMessage(errorTemplate);
+      submitButton.removeAttribute('disabled');
     }
   }
 };

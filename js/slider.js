@@ -70,7 +70,7 @@ let currentEffect = EFFECTS_CONFIG.none;
 
 const scaleImage = (value) => {
   imagePreview.style.transform = `scale(${value / 100})`;
-  scaleControl.value = `${value}%`;
+  scaleControl.value = (`${value}%`);
 };
 
 const resetScale = () => scaleImage(DEFAULT_SCALE);
@@ -104,15 +104,17 @@ const initSlider = () => {
   });
 
   effectsFieldset.addEventListener('change', (evt) => {
+    imagePreview.className = '';
     currentEffect = EFFECTS_CONFIG[evt.target.value];
+
     if (currentEffect.name === 'none') {
       imagePreview.style.filter = '';
-      imagePreview.className = '';
       effectSliderContainer.classList.add('hidden');
     } else {
+      imagePreview.classList.add(`effects__preview--${currentEffect.name}`);
       effectSliderContainer.classList.remove('hidden');
     }
-    imagePreview.classList.add(`effects__preview--${currentEffect.name}`);
+
     effectLevelSlider.noUiSlider.updateOptions({
       range: {
         min: currentEffect.min,
@@ -125,7 +127,7 @@ const initSlider = () => {
 
   effectLevelSlider.noUiSlider.on('update', () => {
     const sliderValue = effectLevelSlider.noUiSlider.get();
-    effectLevelValue.value = sliderValue;
+    effectLevelValue.value = parseFloat(sliderValue);
     if (currentEffect.name === 'none') {
       imagePreview.style.filter = '';
     } else {

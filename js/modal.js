@@ -1,10 +1,20 @@
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
-const createModalHandler = (modalElement, closeButton, closeCallback, outsideClickArea) => {
+const createModalHandler = (modalElement, closeButton, closeCallback, outsideClickArea, ...textInputs) => {
   const onEscKeydown = (evt) => {
     if (isEscapeKey(evt)) {
-      evt.preventDefault();
-      closeModal();
+      const activeElement = document.activeElement;
+      if (textInputs.includes(activeElement)) {
+        return;
+      }
+      const errorElement = document.querySelector('.error');
+
+      if (errorElement) {
+        errorElement.remove();
+      } else {
+        evt.preventDefault();
+        closeModal();
+      }
     }
   };
 

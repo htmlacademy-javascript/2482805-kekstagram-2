@@ -15,7 +15,7 @@ const getData = async () => {
 const sendData = async (body) => {
   try {
     const response = await fetch(
-      BASE_URL,
+      `${BASE_URL}/`,
       {
         method: 'POST',
         body,
