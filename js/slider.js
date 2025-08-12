@@ -4,6 +4,8 @@ const SCALE_STEP = 25;
 const MIN_SCALE = 25;
 const MAX_SCALE = 100;
 const DEFAULT_SCALE = 100;
+const RADIX_BASE = 10;
+
 
 const EFFECTS_CONFIG = {
   none: {
@@ -69,7 +71,7 @@ const effectLevelValue = uploadForm.querySelector('.effect-level__value');
 let currentEffect = EFFECTS_CONFIG.none;
 
 const scaleImage = (value) => {
-  imagePreview.style.transform = `scale(${value / 100})`;
+  imagePreview.style.transform = `scale(${value / MAX_SCALE})`;
   scaleControl.value = (`${value}%`);
 };
 
@@ -88,7 +90,7 @@ const initSlider = () => {
   effectSliderContainer.classList.add('hidden');
 
   scaleSmallerButton.addEventListener('click', () => {
-    let currentValue = parseInt(scaleControl.value, 10);
+    let currentValue = parseInt(scaleControl.value, RADIX_BASE);
     if (currentValue > MIN_SCALE) {
       currentValue -= SCALE_STEP;
       scaleImage(currentValue);
@@ -96,7 +98,7 @@ const initSlider = () => {
   });
 
   scaleBiggerButton.addEventListener('click', () => {
-    let currentValue = parseInt(scaleControl.value, 10);
+    let currentValue = parseInt(scaleControl.value, RADIX_BASE);
     if (currentValue < MAX_SCALE) {
       currentValue += SCALE_STEP;
       scaleImage(currentValue);

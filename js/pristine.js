@@ -1,5 +1,9 @@
 import '../vendor/pristine/pristine.min.js';
 
+const MAX_HASHTAGS = 5;
+const MIN_HASHTAG_LENGTH = 1;
+const MAX_HASHTAG_LENGTH = 19;
+const MAX_DESCRIPTION_LENGTH = 140;
 const uploadForm = document.querySelector('.img-upload__form');
 const hashtagsInput = uploadForm.querySelector('.text__hashtags');
 const descriptionInput = uploadForm.querySelector('.text__description');
@@ -15,7 +19,7 @@ const validateHashtags = (value) => {
     return true;
   }
   const hashtags = value.split(' ').filter((tag) => tag.length > 0);
-  if (hashtags.length > 5) {
+  if (hashtags.length > MAX_HASHTAGS) {
     return false;
   }
   const lowerCaseHashtags = hashtags.map((tag) => tag.toLowerCase());
@@ -24,7 +28,7 @@ const validateHashtags = (value) => {
     return false;
   }
   const isValid = hashtags.every((tag) => {
-    const hashtagRegex = /^#[a-zа-яё0-9]{1,19}$/i;
+    const hashtagRegex = new RegExp(`^#[a-zа-яё0-9]{${MIN_HASHTAG_LENGTH},${MAX_HASHTAG_LENGTH}}$`, 'i');
     return hashtagRegex.test(tag);
   });
   return isValid;
@@ -36,7 +40,7 @@ pristine.addValidator(
   'Хэштеги должны начинаться с #, не содержать спецсимволов, быть длиной до 20 символов и их должно быть не более 5 без повторов.',
 );
 
-const validateDescription = (value) => value.length <= 140;
+const validateDescription = (value) => value.length <= MAX_DESCRIPTION_LENGTH;
 
 pristine.addValidator(
   descriptionInput,
