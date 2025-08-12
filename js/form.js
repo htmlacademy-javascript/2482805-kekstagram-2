@@ -32,20 +32,14 @@ const { openModal: openUploadForm, closeModal: closeUploadForm } = createModalHa
   descriptionInput
 );
 
-uploadFileInput.addEventListener('change', () => {
-  const file = uploadFileInput.files[0];
-  if (file) {
-    const objectURL = URL.createObjectURL(file);
-    imagePreview.src = objectURL;
-    effectsPreviews.forEach((preview) => {
-      preview.style.backgroundImage = `url(${objectURL})`;
-    });
-    openUploadForm();
-  }
-});
-
-const showMessage = (template) => {
+const showMessage = (template, messageText) => {
   const messageElement = template.cloneNode(true);
+  const titleElement = messageElement.querySelector('.error__title');
+
+  if (messageText) {
+    titleElement.textContent = messageText;
+  }
+
   body.append(messageElement);
 
   const closeMessage = () => {
@@ -66,6 +60,23 @@ const showMessage = (template) => {
 
   openModal();
 };
+
+uploadFileInput.addEventListener('change', () => {
+  const file = uploadFileInput.files[0];
+
+  if (!file || !file.type.startsWith('image/')) {
+    showMessage(errorTemplate, 'Загружаемый файл должен быть изображением');
+    uploadFileInput.value = '';
+    return;
+  }
+
+  const objectURL = URL.createObjectURL(file);
+  imagePreview.src = objectURL;
+  effectsPreviews.forEach((preview) => {
+    preview.style.backgroundImage = `url(${objectURL})`;
+  });
+  openUploadForm();
+});
 
 const onFormSubmit = async (evt) => {
   evt.preventDefault();
